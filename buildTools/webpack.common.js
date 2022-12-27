@@ -33,11 +33,6 @@ module.exports = (env, options) => {
         return `${filepath}/[name].[hash][ext][query]`;
       },
     },
-    /* optimization: {
-       // used to avoid duplicated dependencies from node modules
-       runtimeChunk: 'single',
-       splitChunks: false,
-     },*/
     resolve: {
       extensions: ['.js', '.jsx', '.json'],
       // declaring aliases to reduce the use of relative path
