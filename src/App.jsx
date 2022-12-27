@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 //error boundary
 import { ErrorBoundary } from 'react-error-boundary';
 //error boundary fallback
@@ -15,7 +16,9 @@ const App = () => (
       console.log('Try again clicked');
     }}
   >
-    <TestComponent />
+    <BrowserRouter>
+      <TestComponent />
+    </BrowserRouter>
   </ErrorBoundary>
 );
 

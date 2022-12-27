@@ -7,7 +7,29 @@
   }
 }
 
-// tabs will take the full width of the parent element
+@keyframes bottomToTop {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+//for the fancy scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: $scrollbar-color;
+  border-radius: 6px;
+}
+
+// tabs component
 .tabs {
   display: flex;
   flex-direction: column;
@@ -17,68 +39,122 @@
     box-sizing: border-box;
   }
 
-  // use flex to display labels on the same line
   .labels-wrapper {
     display: flex;
     flex-wrap: wrap;
 
-    // styles for a single label
     .tab-label {
-      background: #f9f9f9;
-      border-radius: 0.25em 0.25em 0 0;
-      color: #888888;
-      font-size: 1em;
+      background: $grey1;
+      border-radius: 0.25rem 0.25rem 0 0;
+      color: $dark-grey1;
+      font-size: 1rem;
       text-align: center;
-      line-height: 2em;
+      line-height: 2rem;
       margin-right: 0;
-      margin-bottom: 0.25em;
-      padding: 0 1.5em;
+      margin-bottom: 0.25rem;
+      padding: 0 1.5rem;
       user-select: none;
       cursor: pointer;
       flex-basis: 50%;
       white-space: nowrap;
 
       &:hover {
-        background: #dddddd;
-        color: #666666;
+        background: $grey2;
+        color: $dark-grey2;
       }
 
-      // add border right on all odd labels on mobile to have a gap between labels
       &:nth-of-type(odd) {
-        border-right: 2px solid white;
+        border-right: 2px solid $white;
       }
 
-      // add border left on all even labels on mobile to have a gap between labels
       &:nth-of-type(even) {
-        border-left: 2px solid white;
+        border-left: 2px solid $white;
+      }
+
+      @media (min-width: $tablet) {
+        flex-basis: auto;
+        margin-right: 0.25rem;
+        margin-bottom: 0;
+
+        &:nth-of-type(odd),
+        &:nth-of-type(even) {
+          border: none;
+        }
       }
     }
 
-    // styles for the active tab label
     .active-tab-label {
-      background: #f1f1f1;
-      color: #444444;
+      background: $grey3;
+      color: $dark-grey3;
       z-index: 6;
 
       &:hover {
-        background: #f1f1f1;
-        color: #444444;
+        background: $grey3;
+        color: $dark-grey3;
         cursor: initial;
       }
     }
   }
 
-  // styles for the tabs content wrapper
+  .fancy-labels-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .labels {
+      display: flex;
+      overflow: auto;
+      padding-bottom: 5px;
+    }
+    .tab-additional-icon {
+      padding-bottom: 10px;
+      margin-inline-start: 20px;
+    }
+
+    .tab-label {
+      background: $grey1;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      color: $dark-grey1;
+      font-size: 14px;
+      text-align: center;
+      line-height: 2rem;
+      margin-inline-end: 0.25rem;
+      margin-bottom: 0.25rem;
+      padding: 0 1.5rem;
+      user-select: none;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        background: $grey2;
+        color: $dark-grey2;
+      }
+    }
+
+    .active-tab-label {
+      background-color: transparent;
+      color: $dark-grey3;
+      z-index: 6;
+      border: 1px solid $purple;
+
+      &:hover {
+        background-color: transparent;
+        color: $dark-grey3;
+        cursor: initial;
+      }
+    }
+  }
+
   .tabs-content-wrapper {
     position: relative;
     overflow: hidden;
     display: flex;
-    background-color: #f1f1f1;
+    background-color: $grey3;
 
-    // styles for a single tab content
     .tab-content {
       opacity: 0;
-      padding: 1.5em;
+      padding: 1.5rem;
       transition: all linear 0.1s;
       top: 0;
       left: 0;
@@ -90,10 +166,8 @@
       flex-basis: 100%;
     }
 
-    // styles for the active tab content
     .active-tab-content {
       opacity: 1;
-      z-index: 100;
       position: relative;
       overflow-x: hidden;
       overflow-y: auto;
@@ -102,22 +176,29 @@
       animation: rightToLeft 0.5s;
     }
   }
-}
 
-@media (min-width: 768px) {
-  .tabs {
+  &.vertical-tabs {
+    flex-direction: row;
+
+    .labels,
     .labels-wrapper {
-      // change the flex basis of each label to take the correct width not 50%
-      .tab-label {
-        flex-basis: auto;
-        margin-right: 0.25em;
-        margin-bottom: 0;
+      flex-direction: column;
+    }
 
-        // remove borders
-        &:nth-of-type(odd),
-        &:nth-of-type(even) {
-          border: none;
-        }
+    .labels-wrapper {
+      .tab-label {
+        margin: 0 0 4px 0;
+        border-radius: 0.25rem 0 0 0.25rem;
+        flex-basis: auto;
+        border: none;
+      }
+    }
+
+    .tabs-content-wrapper {
+      flex: 1;
+
+      .active-tab-content {
+        animation: bottomToTop 0.5s;
       }
     }
   }

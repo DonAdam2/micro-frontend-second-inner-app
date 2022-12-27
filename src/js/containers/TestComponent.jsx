@@ -1,18 +1,45 @@
+import { useMemo } from 'react';
 //components
-import Tabs from '../components/shared/tabs/Tabs';
+import Tabs from '../components/shared/Tabs';
 
 const TestComponent = () => {
-  return (
-    <Tabs activeTab={0}>
-      <div label="First">First tab content</div>
-      <div label="Second">Second tab content</div>
-      <div label="Third">Third tab content</div>
-      <div label="Fourth">Fourth tab content</div>
-      <div label="Fifth">Fifth tab content</div>
-      <div label="Sixth">Sixth tab content</div>
-      <div label="Seventh">Seventh tab content</div>
-    </Tabs>
+  const tabsList = useMemo(
+    () => [
+      {
+        label: 'First',
+        // use the following if you want to bind active tab with URL
+        // tabUrl: '/first',
+        content: <span>First tab content</span>,
+      },
+      {
+        label: 'Second',
+        content: <span>Second tab content</span>,
+      },
+      {
+        label: 'Third',
+        content: <span>Third tab content</span>,
+      },
+      {
+        label: 'Fourth',
+        content: <span>Fourth tab content</span>,
+      },
+      {
+        label: 'Fifth',
+        content: <span>Fifth tab content</span>,
+      },
+      {
+        label: 'Sixth',
+        content: <span>Sixth tab content</span>,
+      },
+      {
+        label: 'Seventh',
+        content: <span>Seventh tab content</span>,
+      },
+    ],
+    []
   );
+
+  return <Tabs tabsList={tabsList} />;
 };
 
 export default TestComponent;
