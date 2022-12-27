@@ -1,110 +1,44 @@
-## Micro frontend inner:
+## Micro frontend:
 
 - Uses ***module federation plugin*** from webpack to create injectable ***module***.
+- This app is the remote entry of [Micro frontend inner app](https://github.com/DonAdam2/micro-frontend-inner-app)
 
-**_Note:_** You must start the container app first then inner app in order for the hot reloading to work properly.
+**_Note:_** This app uses live reloading for local development.
 
 ## How to create injectable ***module*** and expose it to parent sites:
 
 - Open **webpack.common.js** file.<br>
     1- Import ***ModuleFederationPlugin***:<br>
-    `ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')`
+    `const { ModuleFederationPlugin } = require('webpack').container`
     
     2- Pass ***ModuleFederationPlugin*** to the ***plugins*** array:<br>
     `plugins: [
                 new ModuleFederationPlugin({`
                 
-    3- Specify the name of the current app in ***ModuleFederationPlugin***:<br>
+    3- Specify the name of the current app (must be unique) in ***ModuleFederationPlugin***:<br>
     `new ModuleFederationPlugin({
-        name: 'inner_app',`
+        name: 'second_inner_app',`
         
-    4- Specify the library type and name by setting them in ***ModuleFederationPlugin***:<br>
-    `library: { type: 'var', name: 'inner_app' },`<br>
-        
-     **_Notes:_** 
-     - library.type: It defines the library type. The available options are var,
-       module, assign, this, window, self, global, commonjs, commonjs2, commonjs-module,
-       amd, amd-require, umd, umd2, jsonp, and system.
-     - library.name: it defines the library name.
-        
-    5- Set the exposed file name in ***ModuleFederationPlugin***:<br>
+    4- Set the exposed file name in ***ModuleFederationPlugin***:<br>
     `filename: 'remoteEntry.js',`
     
-    6- Define the modules you want to expose from the current app in ***ModuleFederationPlugin***:<br>
+    5- Define the modules you want to expose from the current app in ***ModuleFederationPlugin***:<br>
     `exposes: {
-        './App': path.join(PATHS.src, 'RemoteApp'),
-    },`
+       './App': path.join(PATHS.src, 'App'),
+    }`
     
     **_Note:_** The key you specify for each module you expose in `exposes` object
-     will be used in the host app to import that module: `/inner_app/App`.
+     will be used in the host app to import that module: `/second_inner_app/App`.
     
-    7- Add the shared dependencies in ***ModuleFederationPlugin***:<br>
+    6- Add the shared dependencies in ***ModuleFederationPlugin***:<br>
         `new ModuleFederationPlugin({
             shared: ['react', 'react-dom'],
         }),`
  	
 - Create the component you want to expose.
 - Create `bootstrap.js` file and move into it all the code from `index.jsx` file.
-- Import `bootstrap.js` inside `index.jsx` file.<br>
+- Import `bootstrap.js` **dynamically** inside `index.jsx` file.<br>
 `import('./bootstrap');`
-
-
-## How to inject the current redux store as a slice into the parent site redux store:
-
-- You must have 2 exports in your app:
-
-    1- ***Named*** export for development.
-    
-    2- ***Default*** export which will be used for the exposed module.
-    
-- Create RemoteApp component:<br>
-    1- Import current store slices:<br>
-         `import { reducerSlices } from './js/store/rootReducer';`
-         
-    2- Import app:<br>
-         `import App from './App';`
-         
-    3- Import middle wares if any
-    
-    4- Pass store and addMiddleWares as props:<br>
-        `const RemoteInnerApp = ({
-        	store,
-        	addMiddleWares
-        }) => {`
-        
-    5- Create a boolean state which is used to indicate whither the current store slices have been injected into the host store or not:<br>
-        `const [isLoaded, setIsLoaded] = useState(false);`
-        
-    6- Use `injectReducer` and `addMiddleWares` functions:<br>
-        `useEffect(() => {
-        		store.injectReducer(reducerSlices);
-        		addMiddleWares([middleWare1, middleWare2]);
-        	}, [store]);`<br>
-        	
-    **_Notes:_** 
-     - `injectReducer` and `addMiddleWares` functions must be part of the host configurations.     
-     - `injectReducer` function allows you to inject current store slices into the host store.     
-     - `addMiddleWares` function allows you to inject current store middle wares into the host store.
-    
-    7- Set isLoaded flag to true when exposed module reducer slices have been injected successfully into the host store:<br>
-        `useEffect(() => {
-    		const state = store.getState ? store.getState() : {};
-    		if (state.innerApp) {
-    			setIsLoaded(true);
-    		}
-    	}, [store]);`
-    
-    8- Show the app:<br>
-        `<Provider store={store || {}}>
-            {isLoaded ? (
-                <App />
-            ) : (
-                <div className="d-flex justify-content-center">
-                    <LoadingIcon />
-                </div>
-            )}
-        </Provider>`
-    
 
 ## Available Scripts
 
