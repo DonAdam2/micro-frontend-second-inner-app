@@ -8,37 +8,58 @@
 ## How to create injectable ***module*** and expose it to parent sites:
 
 - Open **webpack.common.js** file.<br>
-    1- Import ***ModuleFederationPlugin***:<br>
-    `const { ModuleFederationPlugin } = require('webpack').container`
+    1- Import ***ModuleFederationPlugin***:
     
-    2- Pass ***ModuleFederationPlugin*** to the ***plugins*** array:<br>
-    `plugins: [
-                new ModuleFederationPlugin({`
+    ```
+    const { ModuleFederationPlugin } = require('webpack').container
+    ```
+    
+    2- Pass ***ModuleFederationPlugin*** to the ***plugins*** array:
+    
+    ```
+    plugins: [
+                new ModuleFederationPlugin({
+    ```
                 
     3- Specify the name of the current app (must be unique) in ***ModuleFederationPlugin***:<br>
-    `new ModuleFederationPlugin({
-        name: 'second_inner_app',`
+    
+    ```
+    new ModuleFederationPlugin({
+        name: 'second_inner_app',
+    ```
         
     4- Set the exposed file name in ***ModuleFederationPlugin***:<br>
-    `filename: 'remoteEntry.js',`
+    
+    ```
+    filename: 'remoteEntry.js',
+    ```
     
     5- Define the modules you want to expose from the current app in ***ModuleFederationPlugin***:<br>
-    `exposes: {
+    
+    ```
+    exposes: {
        './App': path.join(PATHS.src, 'App'),
-    }`
+    }
+    ```
     
     **_Note:_** The key you specify for each module you expose in `exposes` object
      will be used in the host app to import that module: `/second_inner_app/App`.
     
     6- Add the shared dependencies in ***ModuleFederationPlugin***:<br>
-        `new ModuleFederationPlugin({
-            shared: ['react', 'react-dom'],
-        }),`
+        
+    ```
+    new ModuleFederationPlugin({
+        shared: ['react', 'react-dom'],
+    }),
+    ```
  	
 - Create the component you want to expose.
 - Create `bootstrap.js` file and move into it all the code from `index.jsx` file.
 - Import `bootstrap.js` **dynamically** inside `index.jsx` file.<br>
-`import('./bootstrap');`
+
+    ```
+     import('./bootstrap');
+    ```
 
 ## Available Scripts
 
