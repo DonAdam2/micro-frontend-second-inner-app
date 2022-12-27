@@ -1,11 +1,42 @@
-## Micro frontend:
+# Table of Contents:
+- [Overview](#micro-frontend-second-inner-app)
+- [Prerequisites](#prerequisites)
+- [Installing & getting started](#installing--getting-started)
+- [How to create injectable module and expose it to parent sites](#how-to-create-injectable-module-and-expose-it-to-parent-sites)
+- [Available scripts](#available-scripts)
+
+## Micro frontend second inner app
 
 - Uses ***module federation plugin*** from webpack to create injectable ***module***.
 - This app is the remote entry of [Micro frontend inner app](https://github.com/DonAdam2/micro-frontend-inner-app)
 
 **_Note:_** This app uses live reloading for local development.
 
-## How to create injectable ***module*** and expose it to parent sites:
+## Prerequisites
+
+- nodeJS > 14.X.X or Docker
+
+## Installing / Getting Started
+
+### Development (locally):
+
+- Clone repo => `git clone git@github.com:react-custom-projects/webpack-react-boilerplate.git`
+- Navigate to project directory `cd webpack-react-boilerplate`
+- Install dependencies => `yarn install`
+- Start the development server => `yarn start`
+
+### Development (using Docker):
+
+- Clone repo => `git clone git@github.com:react-custom-projects/webpack-react-boilerplate.git`
+- Navigate to project directory `cd webpack-react-boilerplate`
+- Install dependencies (required for prettier) => `yarn install`
+- Start the development server => `docker-compose up web-dev`
+
+## Docker for production (_basic setup_) (modify it to your needs):
+- Update the **_production_** section of the **_Dockerfile_** to meet your needs
+- Run the following command to build your image => `docker-compose up web-prod`
+
+## How to create injectable ***module*** and expose it to parent sites
 
 - Open **webpack.common.js** file.<br>
     1- Import ***ModuleFederationPlugin***:
