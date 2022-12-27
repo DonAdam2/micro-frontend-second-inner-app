@@ -36,7 +36,7 @@
 - Update the **_production_** section of the **_Dockerfile_** to meet your needs
 - Run the following command to build your image => `docker-compose up web-prod`
 
-## How to create injectable ***module*** and expose it to parent sites
+## How to create injectable _module_ and expose it to parent sites
 
 - Open **webpack.common.js** file.<br>
     1- Import ***ModuleFederationPlugin***:
