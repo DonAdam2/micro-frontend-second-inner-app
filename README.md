@@ -68,7 +68,7 @@ In the project directory, you can run:
 ### `yarn start`
 
 Runs the app in the development mode.<br>
-It will open [http://localhost:3001](http://localhost:3001) automatically in the browser to see your app.
+It will open [http://localhost:3002](http://localhost:3002) automatically in the browser to see your app.
 
 All changes will be injected automatically without reloading the page.<br>
 
@@ -89,7 +89,7 @@ Your app is ready to be deployed!
 
 ### `yarn build:serve`
 
-Serves the app on [http://localhost:8081](http://localhost:8081) from the `dist` folder to check the production version.
+Serves the app on [http://localhost:8082](http://localhost:8082) from the `dist` folder to check the production version.
 
 **_Note:_** Use this script only if you ran the build script `yarn build`.
 
