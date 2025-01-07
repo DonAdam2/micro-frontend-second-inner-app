@@ -1,3 +1,5 @@
+@use '../../generic/variables' as vars;
+
 @keyframes rightToLeft {
   0% {
     transform: translateX(100%);
@@ -25,7 +27,7 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: $scrollbar-color;
+  background-color: vars.$scrollbar-color;
   border-radius: 6px;
 }
 
@@ -44,9 +46,9 @@
     flex-wrap: wrap;
 
     .tab-label {
-      background: $grey1;
+      background: vars.$grey1;
       border-radius: 0.25rem 0.25rem 0 0;
-      color: $dark-grey1;
+      color: vars.$dark-grey1;
       font-size: 1rem;
       text-align: center;
       line-height: 2rem;
@@ -59,19 +61,19 @@
       white-space: nowrap;
 
       &:hover {
-        background: $grey2;
-        color: $dark-grey2;
+        background: vars.$grey2;
+        color: vars.$dark-grey2;
       }
 
       &:nth-of-type(odd) {
-        border-right: 2px solid $white;
+        border-right: 2px solid vars.$white;
       }
 
       &:nth-of-type(even) {
-        border-left: 2px solid $white;
+        border-left: 2px solid vars.$white;
       }
 
-      @media (min-width: $tablet) {
+      @media (min-width: vars.$tablet) {
         flex-basis: auto;
         margin-right: 0.25rem;
         margin-bottom: 0;
@@ -84,13 +86,13 @@
     }
 
     .active-tab-label {
-      background: $grey3;
-      color: $dark-grey3;
+      background: vars.$grey3;
+      color: vars.$dark-grey3;
       z-index: 6;
 
       &:hover {
-        background: $grey3;
-        color: $dark-grey3;
+        background: vars.$grey3;
+        color: vars.$dark-grey3;
         cursor: initial;
       }
     }
@@ -112,10 +114,10 @@
     }
 
     .tab-label {
-      background: $grey1;
+      background: vars.$grey1;
       border-radius: 20px;
       border: 1px solid transparent;
-      color: $dark-grey1;
+      color: vars.$dark-grey1;
       font-size: 14px;
       text-align: center;
       line-height: 2rem;
@@ -127,20 +129,20 @@
       white-space: nowrap;
 
       &:hover {
-        background: $grey2;
-        color: $dark-grey2;
+        background: vars.$grey2;
+        color: vars.$dark-grey2;
       }
     }
 
     .active-tab-label {
       background-color: transparent;
-      color: $dark-grey3;
+      color: vars.$dark-grey3;
       z-index: 6;
-      border: 1px solid $purple;
+      border: 1px solid vars.$purple;
 
       &:hover {
         background-color: transparent;
-        color: $dark-grey3;
+        color: vars.$dark-grey3;
         cursor: initial;
       }
     }
@@ -150,7 +152,7 @@
     position: relative;
     overflow: hidden;
     display: flex;
-    background-color: $grey3;
+    background-color: vars.$grey3;
 
     .tab-content {
       opacity: 0;
