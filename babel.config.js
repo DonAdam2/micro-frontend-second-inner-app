@@ -16,15 +16,9 @@ module.exports = (api) => {
 
   return {
     presets: [
-      [
-        '@babel/preset-env',
-        {
-          useBuiltIns: 'usage',
-          corejs: '3',
-        },
-      ],
+      '@babel/preset-env',
       ['@babel/preset-react', { runtime: hasJsxRuntime ? 'automatic' : 'classic' }],
     ],
-    plugins: ['@babel/plugin-transform-runtime', '@babel/plugin-syntax-dynamic-import'],
+    plugins: ['@babel/plugin-transform-runtime'],
   };
 };
