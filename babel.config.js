@@ -19,10 +19,7 @@ module.exports = (api) => {
       [
         '@babel/preset-env',
         {
-          targets: {
-            browsers: ['ie >= 11', 'last 2 versions'],
-          },
-          useBuiltIns: 'entry',
+          useBuiltIns: 'usage',
           corejs: '3',
         },
       ],

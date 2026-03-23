@@ -5388,11 +5388,6 @@ postcss-double-position-gradients@^6.0.2:
     "@csstools/utilities" "^2.0.0"
     postcss-value-parser "^4.2.0"
 
-postcss-flexbugs-fixes@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/postcss-flexbugs-fixes/-/postcss-flexbugs-fixes-5.0.2.tgz#2028e145313074fc9abe276cb7ca14e5401eb49d"
-  integrity sha512-18f9voByak7bTktR2QgDveglpn9DTbBWPUzSOe9g0N4WR/2eSt6Vrcbf0hmspvMI6YWGywz6B9f7jzpFNJJgnQ==
-
 postcss-focus-visible@^10.0.1:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/postcss-focus-visible/-/postcss-focus-visible-10.0.1.tgz#1f7904904368a2d1180b220595d77b6f8a957868"
