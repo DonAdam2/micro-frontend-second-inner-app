@@ -14,9 +14,10 @@ const path = require('path'),
   PATHS = require('./paths'),
   { devDependencies } = require(PATHS.packageJson);
 
-module.exports = (env, options) => {
+module.exports = async (env, options) => {
   // the mode variable is passed in package.json scripts (development, production)
-  const isDevelopment = options.mode === 'development';
+  const isDevelopment = options.mode === 'development',
+    { default: postcssPresetEnv } = await import('postcss-preset-env');
 
   return {
     entry: `${PATHS.src}/index.jsx`,
@@ -108,12 +109,9 @@ module.exports = (env, options) => {
                 postcssOptions: {
                   ident: 'postcss',
                   plugins: [
-                    [
-                      'postcss-preset-env',
-                      {
-                        stage: 0,
-                      },
-                    ],
+                    postcssPresetEnv({
+                      stage: 0,
+                    }),
                     'postcss-normalize',
                   ],
                 },

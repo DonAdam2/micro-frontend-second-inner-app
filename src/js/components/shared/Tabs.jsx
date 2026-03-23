@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 //components
 import ConditionalWrapper from './ConditionalWrapper';
@@ -6,33 +6,20 @@ import ConditionalWrapper from './ConditionalWrapper';
 const Tabs = ({ activeTab, tabsList, isFancyTabs = true, isVertical }) => {
   const navigate = useNavigate(),
     { pathname } = useLocation(),
-    [isUrlTabs, setIsUrlTabs] = useState(false),
-    [currentActiveTab, setCurrentActiveTab] = useState();
-
-  useEffect(() => {
-    if (tabsList.find((el) => el.tabUrl)) {
-      setIsUrlTabs(true);
-    } else {
-      if (activeTab !== 0 && activeTab && activeTab < tabsList.length) {
-        setCurrentActiveTab(activeTab);
-      } else {
-        setCurrentActiveTab(0);
-      }
-    }
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    if (isUrlTabs) {
-      const currentActiveTabUrlIndex = tabsList.findIndex((el) => el.tabUrl === pathname);
-      setCurrentActiveTab(currentActiveTabUrlIndex !== -1 ? currentActiveTabUrlIndex : 0);
-    }
-    // eslint-disable-next-line
-  }, [pathname, isUrlTabs]);
+    isUrlTabs = tabsList.some((el) => el.tabUrl),
+    [selectedTab, setSelectedTab] = useState(() =>
+      activeTab !== 0 && activeTab && activeTab < tabsList.length ? activeTab : 0
+    ),
+    currentActiveTab = isUrlTabs
+      ? (() => {
+          const index = tabsList.findIndex((el) => el.tabUrl === pathname);
+          return index !== -1 ? index : 0;
+        })()
+      : selectedTab;
 
   const onChangeTab = (index, tabUrl) => {
     if (tabUrl) navigate(tabUrl);
-    else setCurrentActiveTab(index);
+    else setSelectedTab(index);
   };
 
   return (

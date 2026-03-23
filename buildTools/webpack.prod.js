@@ -13,8 +13,8 @@ const { merge } = require('webpack-merge'),
   { cssSubDirectory } = require('./constants'),
   PATHS = require('./paths');
 
-module.exports = (env, options) => {
-  return merge(common(env, options), {
+module.exports = async (env, options) => {
+  return merge(await common(env, options), {
     performance: {
       hints: false,
       maxEntrypointSize: 512 * 1024,

@@ -44,11 +44,11 @@ function checkPort() {
 }
 
 checkPort()
-  .then((returnedPort) => {
+  .then(async (returnedPort) => {
     if (returnedPort === null) {
       return;
     }
-    const config = webpackConfig(
+    const config = await webpackConfig(
         { WEBPACK_SERVE: true },
         {
           mode: 'development',
@@ -59,9 +59,7 @@ checkPort()
       devServerOptions = { ...config.devServer },
       server = new WebpackDevServer(devServerOptions, compiler);
 
-    (async () => {
-      await server.start();
-    })();
+    await server.start();
   })
   .catch((err) => {
     if (err && err.message) {
