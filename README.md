@@ -14,21 +14,21 @@
 
 ## Prerequisites
 
-- nodeJS > 14.X.X or Docker
+- nodeJS ^22.18.0 or >=24.11.0, or Docker
 
 ## Installing / Getting Started
 
 ### Development (locally):
 
-- Clone repo => `git clone git@github.com:react-custom-projects/webpack-react-boilerplate.git`
-- Navigate to project directory `cd webpack-react-boilerplate`
+- Clone repo => `git clone git@github.com:DonAdam2/micro-frontend-second-inner-app.git`
+- Navigate to project directory `cd micro-frontend-second-inner-app`
 - Install dependencies => `yarn install`
 - Start the development server => `yarn start`
 
 ### Development (using Docker):
 
-- Clone repo => `git clone git@github.com:react-custom-projects/webpack-react-boilerplate.git`
-- Navigate to project directory `cd webpack-react-boilerplate`
+- Clone repo => `git clone git@github.com:DonAdam2/micro-frontend-second-inner-app.git`
+- Navigate to project directory `cd micro-frontend-second-inner-app`
 - Install dependencies (required for prettier) => `yarn install`
 - Start the development server => `docker-compose up web-dev`
 
@@ -74,15 +74,25 @@
     ```
     
     **_Note:_** The key you specify for each module you expose in `exposes` object
-     will be used in the host app to import that module: `/second_inner_app/App`.
+     will be used in the host app to import that module: `second_inner_app/App`, e.g. `<RemoteComponent remote="second_inner_app/App" />`.
     
     6- Add the shared dependencies in ***ModuleFederationPlugin***:<br>
         
     ```
     new ModuleFederationPlugin({
-        shared: ['react', 'react-dom'],
+        shared: {
+          react: { eager: true, singleton: true, requiredVersion: devDependencies['react'] },
+          'react-dom': {
+            eager: true,
+            singleton: true,
+            strictVersion: true,
+            requiredVersion: devDependencies['react-dom'],
+          },
+        },
     }),
     ```
+
+    **_Note:_** The `shared` configuration must match in the host app and all the remote apps (`react` and `react-dom` must be singletons).
  	
 - Create the component you want to expose.
 - Create `bootstrap.js` file and move into it all the code from `index.jsx` file.
@@ -101,11 +111,10 @@ In the project directory, you can run:
 Runs the app in the development mode.<br>
 It will open [http://localhost:3002](http://localhost:3002) automatically in the browser to see your app.
 
-All changes will be injected automatically without reloading the page.<br>
+The page will reload automatically when you make changes (live reloading).<br>
 
 You will see in the console the following:
 
-- All redux store related changes
 - Any of the following errors:
   1. Linting errors.
   2. Code format errors (because of [prettier](https://prettier.io/))
