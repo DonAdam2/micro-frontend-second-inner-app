@@ -134,6 +134,7 @@
 - The host app must render the current app in a route that ends with `/*`, otherwise the urls of the tabs don't match any of its routes.
 - `react-router-dom` must be shared (singleton) with the host app, so the routes of the current app are added to the host router.
 - `HtmlWebpackPlugin` uses `publicPath: '/'`, otherwise opening a nested url directly (e.g. `/carousel/second`) would request `/carousel/js/bundle.js`.
+- If the current app gets redux slices, prefix their names with `secondInner` (e.g. `secondInnerTabs`), the host app uses `container` and the inner app `inner`.
 
 ## Available Scripts
 
