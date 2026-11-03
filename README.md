@@ -3,6 +3,7 @@
 - [Prerequisites](#prerequisites)
 - [Installing & getting started](#installing--getting-started)
 - [How to create injectable module and expose it to parent sites](#how-to-create-injectable-module-and-expose-it-to-parent-sites)
+- [Routes of the current app (url tabs)](#routes-of-the-current-app-url-tabs)
 - [Available scripts](#available-scripts)
 
 ## Micro frontend second inner app
@@ -35,6 +36,11 @@
 ## Docker for production (_basic setup_) (modify it to your needs):
 - Update the **_production_** section of the **_Dockerfile_** to meet your needs
 - Run the following command to build your image => `docker-compose up web-prod`
+- The production image serves the app with **nginx** (**/docker/nginx.conf**):
+  - unknown routes fall back to `index.html` (react router handles them).
+  - `Access-Control-Allow-Origin: *` so the host apps can load the files of the current app (fonts, `remotes.json`, ...).
+  - hashed js/css files are cached forever, `index.html`, `remoteEntry.js` and `remotes.json` are revalidated on every request
+    (otherwise the host apps would keep loading an old version of the current app after a deploy).
 
 ## How to create injectable _module_ and expose it to parent sites
 
@@ -81,18 +87,24 @@
     ```
     new ModuleFederationPlugin({
         shared: {
-          react: { eager: true, singleton: true, requiredVersion: devDependencies['react'] },
+          react: { singleton: true, requiredVersion: majorVersionRange('react') },
           'react-dom': {
-            eager: true,
             singleton: true,
             strictVersion: true,
-            requiredVersion: devDependencies['react-dom'],
+            requiredVersion: majorVersionRange('react-dom'),
           },
+          'react-router-dom': { singleton: true, requiredVersion: majorVersionRange('react-router-dom') },
         },
     }),
     ```
 
-    **_Note:_** The `shared` configuration must match in the host app and all the remote apps (`react` and `react-dom` must be singletons).
+    **_Notes:_**
+    - The `shared` configuration must match in the host app and all the remote apps (`react` and `react-dom` must be singletons).
+    - `majorVersionRange('react')` returns `^19.0.0`, so an app can be deployed with a newer minor/patch version without breaking the other apps
+      (an exact version would make `strictVersion` reject any mismatch).
+    - Remote apps are **not** `eager` (only the host app is), so they use the host copy of the shared packages instead of downloading their own.
+    - The current app uses the router of the host app when it's rendered inside one (**/src/js/components/shared/OptionalRouter.jsx**),
+      otherwise (standalone) it creates its own `BrowserRouter`.
  	
 - Create the component you want to expose.
 - Create `bootstrap.js` file and move into it all the code from `index.jsx` file.
@@ -101,6 +113,27 @@
     ```
      import('./bootstrap');
     ```
+
+## Routes of the current app (url tabs)
+
+- The routes of the current app are **relative** to the url where it's rendered (**/src/App.jsx**):
+
+  ```
+  <Routes>
+    <Route path=":tab?" element={<TestComponent />} />
+  </Routes>
+  ```
+
+  - standalone: `/`, `/first`, `/second`, ...
+  - inside the container app (its route is `/carousel/*`): `/carousel`, `/carousel/first`, `/carousel/second`, ...
+
+- Each tab has a relative `tabUrl` (**/src/js/containers/TestComponent.jsx**), e.g. `tabUrl: 'second'`.
+- **Tabs** reads the active tab from the `tab` param and navigates to `../<tabUrl>`, so it never needs to know where the app is mounted.
+
+**_Notes:_**
+- The host app must render the current app in a route that ends with `/*`, otherwise the urls of the tabs don't match any of its routes.
+- `react-router-dom` must be shared (singleton) with the host app, so the routes of the current app are added to the host router.
+- `HtmlWebpackPlugin` uses `publicPath: '/'`, otherwise opening a nested url directly (e.g. `/carousel/second`) would request `/carousel/js/bundle.js`.
 
 ## Available Scripts
 

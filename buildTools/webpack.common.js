@@ -12,7 +12,12 @@ const path = require('path'),
     metaInfo: { title, description, url, keywords },
   } = require('./constants'),
   PATHS = require('./paths'),
-  { devDependencies } = require(PATHS.packageJson);
+  { devDependencies, dependencies } = require(PATHS.packageJson),
+  /*shared dependencies must be configured the same way in the host and all the remote apps
+  requiredVersion is a range of the major version, so an app can be deployed with a newer minor/patch version
+  without breaking the other apps (an exact version would make strictVersion reject any mismatch)*/
+  majorVersionRange = (packageName) =>
+    `^${{ ...devDependencies, ...dependencies }[packageName].split('.')[0]}.0.0`;
 
 module.exports = async (env, options) => {
   // the mode variable is passed in package.json scripts (development, production)
@@ -150,15 +155,19 @@ module.exports = async (env, options) => {
         },
         //It defines how modules are shared in the share scope
         shared: {
-          //eager: Allows Webpack to include the shared packages directly instead of fetching the library via an asynchronous request
+          //not eager: the host provides these packages, so the remote app doesn't download its own copy
+          //(it still works standalone because index.jsx imports bootstrap.js asynchronously)
           //singleton: Allows only a single version of the shared module in the shared scope
           //strictVersion: Allows Webpack to reject the shared module if its version is not valid
-          react: { eager: true, singleton: true, requiredVersion: devDependencies['react'] },
+          react: { singleton: true, requiredVersion: majorVersionRange('react') },
           'react-dom': {
-            eager: true,
             singleton: true,
             strictVersion: true,
-            requiredVersion: devDependencies['react-dom'],
+            requiredVersion: majorVersionRange('react-dom'),
+          },
+          'react-router-dom': {
+            singleton: true,
+            requiredVersion: majorVersionRange('react-router-dom'),
           },
         },
       }),
@@ -181,6 +190,9 @@ module.exports = async (env, options) => {
         template: `${PATHS.public}/index.html`,
         filename: 'index.html',
         inject: 'body',
+        /*absolute urls for the files injected into index.html (output.publicPath is "auto", which makes them relative),
+        otherwise a nested route like /carousel/second would request /carousel/js/bundle.js*/
+        publicPath: '/',
         favicon: `${PATHS.public}/assets/images/favicon.png`,
         meta: {
           description,

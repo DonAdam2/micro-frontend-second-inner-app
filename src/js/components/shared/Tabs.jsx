@@ -1,24 +1,27 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 //components
 import ConditionalWrapper from './ConditionalWrapper';
 
 const Tabs = ({ activeTab, tabsList, isFancyTabs = true, isVertical }) => {
+  /*url tabs must be rendered by a route with an optional "tab" param (e.g. <Route path=":tab?" />),
+  tabUrl is relative to that route, so the tabs work wherever the app is mounted (/first or /carousel/first)*/
   const navigate = useNavigate(),
-    { pathname } = useLocation(),
+    { tab } = useParams(),
     isUrlTabs = tabsList.some((el) => el.tabUrl),
     [selectedTab, setSelectedTab] = useState(() =>
       activeTab !== 0 && activeTab && activeTab < tabsList.length ? activeTab : 0
     ),
     currentActiveTab = isUrlTabs
       ? (() => {
-          const index = tabsList.findIndex((el) => el.tabUrl === pathname);
+          const index = tabsList.findIndex((el) => el.tabUrl === tab);
           return index !== -1 ? index : 0;
         })()
       : selectedTab;
 
   const onChangeTab = (index, tabUrl) => {
-    if (tabUrl) navigate(tabUrl);
+    //".." leaves the current tab route, so the new tab replaces the current one instead of being appended to it
+    if (tabUrl) navigate(`../${tabUrl}`);
     else setSelectedTab(index);
   };
 
